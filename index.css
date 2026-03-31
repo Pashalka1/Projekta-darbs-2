@@ -1,0 +1,78 @@
+import LoginForm from './features/auth/LoginForm';
+import Navbar from './components/Navbar';
+import HomePage from './components/HomePage';
+import BakuganCatalog from './features/catalog/BakuganCatalog';
+import BattleSimulator from './features/battle/BattleSimulator';
+import { AppProvider, useAppContext } from './context/AppContext';
+
+function AppShell() {
+  const { user, currentPage } = useAppContext();
+
+  if (!user) {
+    return <LoginForm />;
+  }
+
+  return (
+    <div className="app-shell min-h-screen">
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-red-700/15 blur-3xl" />
+        <div className="absolute top-64 -left-16 h-72 w-72 rounded-full bg-purple-700/10 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-blue-700/10 blur-3xl" />
+      </div>
+
+      <Navbar />
+
+      <main className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {currentPage === 'home' && <HomePage />}
+
+        {currentPage === 'catalog' && (
+          <section className="space-y-8">
+            <div className="glass-card relative overflow-hidden px-6 py-7 sm:px-8">
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-transparent to-transparent" />
+              <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <p className="mb-2 font-display text-xs uppercase tracking-[0.35em] text-red-300">Bakugan datubāze</p>
+                  <h1 className="section-title mb-2">📖 Bakuganu Katalogs</h1>
+                  <p className="max-w-2xl text-sm text-gray-300 sm:text-base">
+                    Pārlūko visus cīnītājus, filtrē pēc atribūta, sezonas un retuma, un atver detalizētu skatu ar spējām.
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-sm sm:w-auto">
+                  <div className="surface-card px-4 py-3 text-center">
+                    <div className="font-display text-xs uppercase tracking-[0.25em] text-gray-500">Meklēšana</div>
+                    <div className="mt-1 font-bold text-white">Ātra un ērta</div>
+                  </div>
+                  <div className="surface-card px-4 py-3 text-center">
+                    <div className="font-display text-xs uppercase tracking-[0.25em] text-gray-500">Detalizācija</div>
+                    <div className="mt-1 font-bold text-white">Modal logs</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <BakuganCatalog />
+          </section>
+        )}
+
+        {currentPage === 'battle' && <BattleSimulator />}
+      </main>
+
+      <footer className="relative z-10 mt-16 border-t border-white/10 bg-black/20">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-center text-sm text-gray-400 sm:px-6 md:flex-row md:items-center md:justify-between md:text-left lg:px-8">
+          <div>
+            <p className="font-display text-sm uppercase tracking-[0.25em] text-gray-500">Bakugan Universe</p>
+            <p className="mt-1 text-gray-400">Programmēšana II projekts ar tumšu, responsīvu un spēļveidīgu interfeisu.</p>
+          </div>
+          <p className="text-xs text-gray-500">React + TypeScript + Tailwind CSS + Axios + json-server</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AppProvider>
+      <AppShell />
+    </AppProvider>
+  );
+}

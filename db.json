@@ -1,0 +1,43 @@
+import { apiClient } from '../../shared/api/client';
+import { getApiErrorMessage } from '../../shared/api/errors';
+import { Bakugan, Attribute } from './types';
+
+export const fetchAllBakugan = async (): Promise<Bakugan[]> => {
+  try {
+    const response = await apiClient.get<Bakugan[]>('/bakugan');
+    return response.data;
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error, 'Neizdevās ielādēt Bakuganus.'));
+  }
+};
+
+export const fetchBakuganById = async (id: number): Promise<Bakugan> => {
+  try {
+    const response = await apiClient.get<Bakugan>(`/bakugan/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error, 'Neizdevās ielādēt Bakugana detaļas.'));
+  }
+};
+
+export const fetchBakuganByAttribute = async (attribute: Attribute): Promise<Bakugan[]> => {
+  try {
+    const response = await apiClient.get<Bakugan[]>('/bakugan', {
+      params: { attribute },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error, 'Neizdevās filtrēt Bakuganus pēc atribūta.'));
+  }
+};
+
+export const searchBakugan = async (query: string): Promise<Bakugan[]> => {
+  try {
+    const response = await apiClient.get<Bakugan[]>('/bakugan', {
+      params: { q: query },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error, 'Neizdevās atrast Bakuganus.'));
+  }
+};
